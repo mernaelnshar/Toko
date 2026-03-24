@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect , useContext } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import toast from 'react-hot-toast';
 import { LanguageContext } from "@/context/LanguageContext";
 
@@ -58,15 +58,38 @@ export const CartProvider = ({ children }) => {
     };
 
     const clearCart = () => {
-    setCart([]);
-    localStorage.removeItem("cart"); 
-};
+        setCart([]);
+        localStorage.removeItem("cart");
+    };
 
     const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
     const cartCount = cart.reduce((count, item) => count + item.quantity, 0);
 
+    const [orders, setOrders] = useState(() => {
+        const savedOrders = localStorage.getItem("orders");
+        return savedOrders ? JSON.parse(savedOrders) : [];
+    });
+
+    useEffect(() => {
+        localStorage.setItem("orders", JSON.stringify(orders));
+    }, [orders]);
+
+    const placeOrder = (customerData) => {
+        const newOrder = {
+            id: `ORD-${Math.floor(Math.random() * 10000)}`, 
+            date: new Date().toLocaleDateString(),
+            items: [...cart], 
+            total: cartTotal,
+            status: language === "EN" ? "Processing" : "جاري المعالجة",
+            customer: customerData 
+        };
+
+        setOrders((prev) => [newOrder, ...prev]); 
+        clearCart(); 
+    };
+
     return (
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, cartTotal, cartCount , clearCart }}>
+        <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, cartTotal, cartCount, clearCart, orders, placeOrder }}>
             {children}
         </CartContext.Provider>
     );

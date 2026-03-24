@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 export default function Checkout() {
-  const { cart , clearCart , cartTotal } = useContext(CartContext);
+  const { cart , clearCart , cartTotal , placeOrder} = useContext(CartContext);
   const { theme } = useContext(ThemeContext);
   const { language } = useContext(LanguageContext);
   const navigate = useNavigate();
@@ -20,8 +20,13 @@ export default function Checkout() {
   const handlePlaceOrder = (e) => {
     e.preventDefault();
     setLoading(true);
+    const customerData = {
+        name: e.target[0].value + " " + e.target[1].value,
+        address: e.target[2].value
+    };
     
     setTimeout(() => {
+      placeOrder(customerData);
       setLoading(false);
       toast.success(
         language === "EN" ? "Order placed successfully!" : "تم تسجيل طلبك بنجاح!",
