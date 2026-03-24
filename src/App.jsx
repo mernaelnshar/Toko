@@ -12,6 +12,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import NotFound from "./pages/NotFound";
 import MainLayout from "./components/layout/MainLayout";
 import { Toaster } from 'react-hot-toast';
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 function App() {
   return (
     <Router>
@@ -23,12 +24,15 @@ function App() {
 
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/wishlist" element={<Wishlist/>}/>
-          <Route path="/checkout" element={<Checkout />} />
           <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/orders" element={<Orders />} />
+          
+          <Route element={<ProtectedRoute />}>
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/orders" element={<Orders />} />
+          </Route>
         </Route>
 
         <Route path="/login" element={<Login />} />

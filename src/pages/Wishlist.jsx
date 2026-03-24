@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { WishlistContext } from "@/context/WishlistContext";
 import { ThemeContext } from "@/context/ThemeContext";
 import { LanguageContext } from "@/context/LanguageContext";
+import { CartContext } from "@/context/CartContext";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, ShoppingCart, Trash2, ArrowLeft } from "lucide-react";
@@ -11,6 +12,8 @@ export default function Wishlist() {
     const { wishlist, toggleWishlist } = useContext(WishlistContext);
     const { theme } = useContext(ThemeContext);
     const { language } = useContext(LanguageContext);
+    const { addToCart } = useContext(CartContext);
+
 
     if (wishlist.length === 0) {
         return (
@@ -90,7 +93,7 @@ export default function Wishlist() {
 
                                 <div className="flex justify-between items-center w-full">
                                     <span className="text-2xl font-black text-accent">${product.price}</span>
-                                    <Button size="icon" className="h-12 w-12 rounded-[1.2rem] bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/30 active:scale-90 transition-all">
+                                    <Button onClick={() => addToCart(product)} size="icon" className="h-12 w-12 rounded-[1.2rem] bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/30 active:scale-90 transition-all">
                                         <ShoppingCart size={20} />
                                     </Button>
                                 </div>

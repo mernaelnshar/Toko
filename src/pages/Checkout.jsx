@@ -62,11 +62,11 @@ export default function Checkout() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>{language === "EN" ? "First Name" : "الاسم الأول"}</Label>
-                  <Input required className="rounded-xl h-12" placeholder="John" />
+                  <Input required className="rounded-xl h-12" placeholder="first name" />
                 </div>
                 <div className="space-y-2">
                   <Label>{language === "EN" ? "Last Name" : "الاسم الأخير"}</Label>
-                  <Input required className="rounded-xl h-12" placeholder="Doe" />
+                  <Input required className="rounded-xl h-12" placeholder="last name" />
                 </div>
               </div>
               
