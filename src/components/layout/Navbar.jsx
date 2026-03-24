@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { ThemeContext } from "@/context/ThemeContext";
 import { LanguageContext } from "@/context/LanguageContext";
 import { WishlistContext } from "@/context/WishlistContext";
+import { CartContext } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import {
     ShoppingCart, User, Package, Sun, Moon,
@@ -21,12 +22,13 @@ export default function Navbar() {
     const { theme, toggleTheme } = useContext(ThemeContext);
     const { language, toggleLanguage } = useContext(LanguageContext);
     const { wishlist } = useContext(WishlistContext);
+    const { cartCount } = useContext(CartContext);
     const [isOpen, setIsOpen] = useState(false);
 
     const navLinks = [
         { to: "/", icon: <Home size={20} />, label: language === "EN" ? "Home" : "الرئيسية" },
         { to: "/wishlist", icon: <Heart size={20} />, label: language === "EN" ? "Wishlist" : "المفضلة", badge: wishlist.length },
-        { to: "/cart", icon: <ShoppingCart size={20} />, label: language === "EN" ? "Cart" : "السلة" },
+        { to: "/cart", icon: <ShoppingCart size={20} />, label: language === "EN" ? "Cart" : "السلة" , badge: cartCount},
         { to: "/orders", icon: <Package size={20} />, label: language === "EN" ? "Orders" : "طلباتي" },
         { to: "/profile", icon: <User size={20} />, label: language === "EN" ? "Profile" : "حسابي" },
     ];

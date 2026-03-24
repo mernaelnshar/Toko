@@ -11,9 +11,14 @@ import Orders from "./pages/Orders";
 import ForgotPassword from "./pages/ForgotPassword";
 import NotFound from "./pages/NotFound";
 import MainLayout from "./components/layout/MainLayout";
+import { Toaster } from 'react-hot-toast';
 function App() {
   return (
     <Router>
+      <Toaster 
+        position="top-right" 
+        reverseOrder={false}
+      />
       <Routes>
 
         <Route element={<MainLayout />}>

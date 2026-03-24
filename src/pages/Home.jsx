@@ -8,12 +8,13 @@ import { ShoppingCart, Star, RefreshCw, Layers, ChevronLeft, ChevronRight, Heart
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { WishlistContext } from "@/context/WishlistContext";
-
+import { CartContext } from "@/context/CartContext";
+import { Link } from "react-router-dom";
 export default function Home() {
   const { theme } = useContext(ThemeContext);
   const { language } = useContext(LanguageContext);
   const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
-
+  const { addToCart } = useContext(CartContext);
 
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -21,22 +22,19 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // --- حالات الـ Pagination ---
   const [skip, setSkip] = useState(0);
   const [total, setTotal] = useState(0);
-  const limit = 8; // عرض 8 منتجات في كل صفحة
+  const limit = 8;
 
   const fetchData = async (currentSkip = 0, category = activeCategory) => {
     setLoading(true);
     setError(null);
     try {
-      // جلب الأقسام مرة واحدة فقط
       if (categories.length === 0) {
         const catRes = await axios.get("https://dummyjson.com/products/categories");
         setCategories(catRes.data.slice(0, 8));
       }
 
-      // بناء الرابط بناءً على القسم والـ skip
       let url = `https://dummyjson.com/products?limit=${limit}&skip=${currentSkip}`;
       if (category !== "all") {
         url = `https://dummyjson.com/products/category/${category}?limit=${limit}&skip=${currentSkip}`;
@@ -44,7 +42,7 @@ export default function Home() {
 
       const prodRes = await axios.get(url);
       setProducts(prodRes.data.products);
-      setTotal(prodRes.data.total); // تحديث إجمالي المنتجات للتحكم في الأزرار
+      setTotal(prodRes.data.total); 
     } catch {
       setError(language === "EN" ? "Error loading data" : "خطأ في تحميل البيانات");
     } finally {
@@ -58,7 +56,7 @@ export default function Home() {
 
   const handleCategoryChange = (slug) => {
     setActiveCategory(slug);
-    setSkip(0); // تصفير الصفحة عند تغيير القسم
+    setSkip(0); 
     fetchData(0, slug);
   };
 
@@ -66,7 +64,7 @@ export default function Home() {
     const nextSkip = skip + limit;
     setSkip(nextSkip);
     fetchData(nextSkip, activeCategory);
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // العودة لأعلى الصفحة
+    window.scrollTo({ top: 0, behavior: 'smooth' }); 
   };
 
   const handlePrev = () => {
@@ -141,6 +139,7 @@ export default function Home() {
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {products.map((product) => (
+                <Link to={`/product/${product.id}`} key={product.id}>
                 <Card
                   key={product.id}
                   className={`group relative border-none overflow-hidden rounded-[2.5rem] transition-all duration-500 hover:shadow-2xl hover:-translate-y-3 ${theme === 'dark' ? 'bg-[#1E1E1E]' : 'bg-gray-50'
@@ -152,7 +151,7 @@ export default function Home() {
                       variant="ghost"
                       size="icon"
                       onClick={(e) => {
-                        e.preventDefault(); // عشان لو الكارت كله لينك ميفتحش الصفحة
+                        e.preventDefault(); 
                         toggleWishlist(product);
                       }}
                       className="absolute top-4 left-4 z-20 bg-white/70 dark:bg-black/40 backdrop-blur-md rounded-full hover:bg-white dark:hover:bg-black transition-all shadow-sm"
@@ -197,6 +196,7 @@ export default function Home() {
                       <span className="text-2xl font-black text-accent">${product.price}</span>
                       <Button
                         size="icon"
+                        onClick={() => addToCart(product)}
                         className="h-12 w-12 rounded-[1.2rem] bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/30 active:scale-90 transition-all"
                       >
                         <ShoppingCart size={20} />
@@ -204,6 +204,7 @@ export default function Home() {
                     </div>
                   </CardFooter>
                 </Card>
+                </Link>
               ))}
             </div>
 
