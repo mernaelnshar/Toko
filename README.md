@@ -33,10 +33,10 @@ Modern React E-Commerce Application with Authentication, Dark Mode, and Multi-la
 # 📸 Screenshots
 
 ## Login Page
-<img src="./src/assets/login.png" />
+<img src="./src/assets/login.jpeg" />
 
 ## Register Page
-<img src="./src/assets/register.png" />
+<img src="./src/assets/register.jpeg" />
 
 ---
 
